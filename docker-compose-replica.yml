@@ -1,0 +1,25 @@
+version: '2'
+services:
+    mongodb1:
+        image: mongo:latest
+        restart: always
+        container_name: mongodb1
+        volumes:
+        - mongodata1:/data/db
+        ports:
+        - "27017:27017"
+        entrypoint: [ "/usr/bin/mongod", "--replSet", "terjemah", "--bind_ip_all", "--wiredTigerCacheSizeGB", "1"]
+    
+    mongosetup:
+        image: "mongo-setup"
+        build: "./mongo-setup"
+        container_name: "mongosetup"
+        depends_on:
+            - mongodb1
+        volumes:
+            - mongostatus:/data/
+    
+
+volumes:
+    mongodata1:
+    mongostatus:
